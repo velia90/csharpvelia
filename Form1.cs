@@ -32,6 +32,7 @@ namespace AplikasiPencatatanWarga
         {
             Label lblNIK = new Label() { Text = "NIK", Location = new Point(20, 20) };
             txtNIK = new TextBox() { Location = new Point(150, 20), Width = 200, MaxLength = 16 };
+            txtNIK.KeyPress += TxtNIK_KeyPress;
 
             Label lblNama = new Label() { Text = "Nama Lengkap", Location = new Point(20, 50) };
             txtNamaLengkap = new TextBox() { Location = new Point(150, 50), Width = 200 };
@@ -132,6 +133,12 @@ namespace AplikasiPencatatanWarga
                 return;
             }
 
+            if (txtNIK.Text.Length != 16)
+            {
+                MessageBox.Show("NIK harus 16 digit angka.", "Validasi");
+                return;
+            }
+
             bool success = dbManager.SaveWarga(
                 txtNIK.Text.Trim(),
                 txtNamaLengkap.Text.Trim(),
@@ -194,6 +201,14 @@ namespace AplikasiPencatatanWarga
                 txtNIK.ReadOnly = true;
                 btnUbah.Enabled = true;
                 btnHapus.Enabled = true;
+            }
+        }
+
+        private void TxtNIK_KeyPress(object? sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
             }
         }
     }
